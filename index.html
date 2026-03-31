@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>IADR/AADOCR 2026 Post-Event Survey | DCG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #003359;
+    --gray: #A5ACAF;
+    --green: #44D62C;
+    --navy-dark: #002240;
+    --navy-light: #004880;
+    --green-light: rgba(68,214,44,0.08);
+    --green-mid: rgba(68,214,44,0.18);
+    --white: #FFFFFF;
+    --off-white: #F4F5F6;
+    --text-body: #2D2D2D;
+    --border-light: #D8DCDE;
+    --red: #D32F2F;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 16px rgba(0,51,89,0.08);
+    --radius: 6px;
+    --radius-lg: 10px;
+  }
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+  body{
+    font-family:'Source Sans 3',-apple-system,BlinkMacSystemFont,sans-serif;
+    color:var(--text-body);background:var(--off-white);
+    line-height:1.7;font-size:16px;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  /* HEADER */
+  .survey-header{
+    background:linear-gradient(135deg,var(--navy-dark) 0%,var(--navy) 50%,var(--navy-light) 100%);
+    color:var(--white);padding:48px 24px 40px;position:relative;overflow:hidden;text-align:center;
+  }
+  .survey-header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:var(--green)}
+  .survey-header-inner{max-width:640px;margin:0 auto;position:relative;z-index:1}
+  .survey-badge{
+    display:inline-block;background:var(--green);color:var(--navy-dark);
+    font-family:'Montserrat',sans-serif;font-weight:700;font-size:10px;
+    letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:3px;margin-bottom:16px;
+  }
+  .survey-header h1{
+    font-family:'Montserrat',sans-serif;font-weight:800;
+    font-size:clamp(22px,4.5vw,32px);line-height:1.2;margin-bottom:8px;
+  }
+  .survey-header h1 span{color:var(--green)}
+  .survey-header p{font-size:15px;opacity:.8;max-width:500px;margin:0 auto;line-height:1.6}
+  .survey-header .est-time{
+    display:inline-block;margin-top:14px;
+    font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;
+    letter-spacing:1px;text-transform:uppercase;opacity:.6;
+  }
+
+  /* PROGRESS BAR */
+  .progress-wrap{
+    position:sticky;top:0;z-index:100;background:var(--white);
+    border-bottom:1px solid var(--border-light);
+    padding:12px 24px;box-shadow:var(--shadow-sm);
+  }
+  .progress-inner{max-width:640px;margin:0 auto;display:flex;align-items:center;gap:14px}
+  .progress-bar{flex:1;height:6px;background:var(--border-light);border-radius:3px;overflow:hidden}
+  .progress-fill{height:100%;background:var(--green);border-radius:3px;width:0%;transition:width .4s ease}
+  .progress-label{
+    font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;
+    color:var(--navy);letter-spacing:.5px;white-space:nowrap;min-width:40px;text-align:right;
+  }
+
+  /* FORM CONTAINER */
+  .survey-form{max-width:640px;margin:0 auto;padding:0 24px 60px}
+
+  /* BLOCKS */
+  .block{padding:36px 0 28px;border-bottom:1px solid var(--border-light)}
+  .block:last-of-type{border-bottom:none}
+  .block-label{
+    font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;
+    letter-spacing:2.5px;text-transform:uppercase;color:var(--green);margin-bottom:4px;
+  }
+  .block-title{
+    font-family:'Montserrat',sans-serif;font-weight:800;font-size:20px;
+    color:var(--navy);margin-bottom:20px;line-height:1.2;
+  }
+
+  /* QUESTION */
+  .question{margin-bottom:28px}
+  .question:last-child{margin-bottom:0}
+  .q-label{
+    font-family:'Montserrat',sans-serif;font-weight:600;font-size:14px;
+    color:var(--navy);margin-bottom:10px;line-height:1.5;display:block;
+  }
+  .q-number{
+    font-size:12px;font-weight:700;color:var(--green);letter-spacing:.5px;margin-right:6px;
+  }
+  .q-required{color:var(--red);font-weight:700;margin-left:2px}
+
+  /* RADIO / CHECKBOX OPTIONS */
+  .options{display:flex;flex-direction:column;gap:6px}
+  .option{
+    display:flex;align-items:center;gap:10px;
+    padding:10px 14px;border-radius:var(--radius);
+    border:1px solid var(--border-light);background:var(--white);
+    cursor:pointer;transition:border-color .2s,background .2s;
+    font-size:15px;
+  }
+  .option:hover{border-color:var(--green);background:var(--green-light)}
+  .option.selected{border-color:var(--green);background:var(--green-light)}
+  .option input[type="radio"],
+  .option input[type="checkbox"]{
+    width:18px;height:18px;accent-color:var(--green);flex-shrink:0;cursor:pointer;
+  }
+  .option label{cursor:pointer;flex:1;line-height:1.4}
+
+  /* LIKERT SCALE */
+  .likert{display:flex;gap:0;margin-top:4px}
+  .likert-option{
+    flex:1;text-align:center;padding:12px 4px 10px;
+    border:1px solid var(--border-light);background:var(--white);
+    cursor:pointer;transition:all .2s;
+    font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;
+    color:var(--gray);line-height:1.3;
+  }
+  .likert-option:first-child{border-radius:var(--radius) 0 0 var(--radius)}
+  .likert-option:last-child{border-radius:0 var(--radius) var(--radius) 0}
+  .likert-option:not(:first-child){border-left:none}
+  .likert-option:hover{background:var(--green-light);color:var(--navy)}
+  .likert-option.selected{background:var(--navy);color:var(--white);border-color:var(--navy)}
+  .likert-option input{display:none}
+  .likert-num{display:block;font-size:18px;font-weight:800;margin-bottom:2px;color:inherit}
+  .likert-label{font-size:10px;letter-spacing:.3px}
+
+  /* AGREE SCALE */
+  .agree-scale{display:flex;gap:0;margin-top:4px}
+  .agree-option{
+    flex:1;text-align:center;padding:14px 4px;
+    border:1px solid var(--border-light);background:var(--white);
+    cursor:pointer;transition:all .2s;
+    font-family:'Montserrat',sans-serif;font-size:10px;font-weight:600;
+    letter-spacing:.3px;color:var(--gray);line-height:1.3;
+  }
+  .agree-option:first-child{border-radius:var(--radius) 0 0 var(--radius)}
+  .agree-option:last-child{border-radius:0 var(--radius) var(--radius) 0}
+  .agree-option:not(:first-child){border-left:none}
+  .agree-option:hover{background:var(--green-light);color:var(--navy)}
+  .agree-option.selected{background:var(--navy);color:var(--white);border-color:var(--navy)}
+  .agree-option input{display:none}
+
+  /* TEXTAREA */
+  .q-textarea{
+    width:100%;min-height:100px;padding:14px 16px;
+    border:1px solid var(--border-light);border-radius:var(--radius);
+    font-family:'Source Sans 3',sans-serif;font-size:15px;color:var(--text-body);
+    line-height:1.6;resize:vertical;background:var(--white);
+    transition:border-color .2s;
+  }
+  .q-textarea:focus{outline:none;border-color:var(--green)}
+  .q-textarea::placeholder{color:var(--gray)}
+
+  /* MULTI-SELECT NOTE */
+  .q-note{font-size:12px;color:var(--gray);margin-bottom:8px;font-style:italic}
+  .select-all-link{
+    color:var(--navy);font-style:normal;font-weight:600;text-decoration:underline;
+    text-underline-offset:2px;cursor:pointer;margin-left:4px;font-size:12px;
+  }
+  .select-all-link:hover{color:var(--green)}
+
+  /* SUBMIT AREA */
+  .submit-area{
+    text-align:center;padding:36px 0 20px;
+  }
+  .submit-btn{
+    background:var(--green);color:var(--navy-dark);border:none;
+    font-family:'Montserrat',sans-serif;font-weight:700;font-size:14px;
+    letter-spacing:1px;text-transform:uppercase;
+    padding:16px 48px;border-radius:var(--radius);cursor:pointer;
+    transition:background .2s,transform .2s;
+    box-shadow:0 4px 16px rgba(68,214,44,0.25);
+  }
+  .submit-btn:hover{background:#3cc125;transform:translateY(-1px)}
+  .submit-btn:active{transform:translateY(0)}
+  .submit-note{font-size:13px;color:var(--gray);margin-top:12px}
+
+  /* THANK YOU */
+  .thank-you{
+    display:none;text-align:center;padding:80px 24px;
+    max-width:640px;margin:0 auto;
+  }
+  .thank-you h2{
+    font-family:'Montserrat',sans-serif;font-weight:800;font-size:28px;
+    color:var(--navy);margin-bottom:12px;
+  }
+  .thank-you p{font-size:16px;color:var(--text-body);max-width:440px;margin:0 auto 20px}
+  .thank-you .check-circle{
+    width:80px;height:80px;border-radius:50%;
+    background:var(--green);display:flex;align-items:center;justify-content:center;
+    margin:0 auto 24px;
+  }
+  .thank-you .check-circle svg{width:40px;height:40px;stroke:var(--navy-dark);fill:none;stroke-width:3}
+
+  /* EXPORT BUTTONS */
+  .export-area{
+    display:none;text-align:center;padding:20px 0;
+    max-width:640px;margin:0 auto;
+  }
+  .export-btn{
+    background:var(--navy);color:var(--white);border:none;
+    font-family:'Montserrat',sans-serif;font-weight:600;font-size:12px;
+    letter-spacing:.5px;text-transform:uppercase;
+    padding:12px 24px;border-radius:var(--radius);cursor:pointer;
+    transition:background .2s;margin:0 6px;
+  }
+  .export-btn:hover{background:var(--navy-light)}
+
+  /* FOOTER */
+  .survey-footer{
+    background:var(--navy-dark);color:var(--white);
+    padding:28px 24px;text-align:center;
+  }
+  .survey-footer p{font-size:12px;opacity:.5}
+  .survey-footer .ft{font-family:'Montserrat',sans-serif;font-weight:700;font-size:12px;opacity:1;margin-bottom:4px}
+
+  /* RESPONSIVE */
+  @media(max-width:540px){
+    .survey-header{padding:36px 16px 32px}
+    .survey-form{padding:0 16px 48px}
+    .progress-wrap{padding:10px 16px}
+    .block-title{font-size:18px}
+    .q-label{font-size:13px}
+    .likert-option{padding:10px 2px 8px}
+    .likert-num{font-size:16px}
+    .likert-label{font-size:9px}
+    .agree-option{padding:12px 2px;font-size:9px}
+    .option{padding:9px 12px;font-size:14px}
+    .submit-btn{width:100%;padding:16px 24px}
+  }
+  @media(max-width:375px){
+    .likert-num{font-size:14px}
+    .agree-option{font-size:8px;padding:10px 1px}
+  }
+  @supports(padding:env(safe-area-inset-left)){
+    .survey-header{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+    .survey-form{padding-left:max(16px,env(safe-area-inset-left));padding-right:max(16px,env(safe-area-inset-right))}
+    .survey-footer{padding-bottom:max(28px,env(safe-area-inset-bottom))}
+  }
+</style>
+</head>
+<body>
+
+<header class="survey-header">
+  <div class="survey-header-inner">
+    <div class="survey-badge">Post-Event Survey</div>
+    <h1>IADR/AADOCR <span>2026</span><br>DCG Delegation Feedback</h1>
+    <p>Your feedback will shape future DCG participation at national and international research meetings.</p>
+    <div class="est-time">Estimated time: 5-6 minutes</div>
+  </div>
+</header>
+
+<div class="progress-wrap">
+  <div class="progress-inner">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">0%</div>
+  </div>
+</div>
+
+<div class="survey-form" id="surveyForm">
+
+  <!-- BLOCK 1 -->
+  <div class="block">
+    <div class="block-label">Block 1 / About You</div>
+    <div class="block-title">Your Role</div>
+    <div class="question" data-q="q1">
+      <span class="q-label"><span class="q-number">Q1.</span>What best describes your role at the IADR/AADOCR 2026 meeting?<span class="q-required">*</span></span>
+      <div class="options" data-name="q1" data-type="radio">
+        <div class="option" onclick="selectOption(this)"><input type="radio" name="q1" value="Faculty"><label>Faculty</label></div>
+        <div class="option" onclick="selectOption(this)"><input type="radio" name="q1" value="Student"><label>Student</label></div>
+        <div class="option" onclick="selectOption(this)"><input type="radio" name="q1" value="Staff/Administration"><label>Staff / Administration</label></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOCK 2 -->
+  <div class="block">
+    <div class="block-label">Block 2 / Overall Experience</div>
+    <div class="block-title">The Meeting and the Booth</div>
+
+    <div class="question" data-q="q2">
+      <span class="q-label"><span class="q-number">Q2.</span>How would you rate your overall experience at the IADR/AADOCR 2026 meeting?<span class="q-required">*</span></span>
+      <div class="likert" data-name="q2">
+        <div class="likert-option" onclick="selectLikert(this)"><input type="radio" name="q2" value="1"><span class="likert-num">1</span><span class="likert-label">Poor</span></div>
+        <div class="likert-option" onclick="selectLikert(this)"><input type="radio" name="q2" value="2"><span class="likert-num">2</span><span class="likert-label">Fair</span></div>
+        <div class="likert-option" onclick="selectLikert(this)"><input type="radio" name="q2" value="3"><span class="likert-num">3</span><span class="likert-label">Good</span></div>
+        <div class="likert-option" onclick="selectLikert(this)"><input type="radio" name="q2" value="4"><span class="likert-num">4</span><span class="likert-label">Very Good</span></div>
+        <div class="likert-option" onclick="selectLikert(this)"><input type="radio" name="q2" value="5"><span class="likert-num">5</span><span class="likert-label">Excellent</span></div>
+      </div>
+    </div>
+
+    <div class="question" data-q="q3">
+      <span class="q-label"><span class="q-number">Q3.</span>How would you rate the DCG booth experience specifically?<span class="q-required">*</span></span>
+      <div class="likert" data-name="q3">
+        <div class="likert-option" onclick="selectLikert(this)"><input type="radio" name="q3" value="1"><span class="likert-num">1</span><span class="likert-label">Poor</span></div>
+        <div class="likert-option" onclick="selectLikert(this)"><input type="radio" name="q3" value="2"><span class="likert-num">2</span><span class="likert-label">Fair</span></div>
+        <div class="likert-option" onclick="selectLikert(this)"><input type="radio" name="q3" value="3"><span class="likert-num">3</span><span class="likert-label">Good</span></div>
+        <div class="likert-option" onclick="selectLikert(this)"><input type="radio" name="q3" value="4"><span class="likert-num">4</span><span class="likert-label">Very Good</span></div>
+        <div class="likert-option" onclick="selectLikert(this)"><input type="radio" name="q3" value="5"><span class="likert-num">5</span><span class="likert-label">Excellent</span></div>
+      </div>
+    </div>
+
+    <div class="question" data-q="q4">
+      <span class="q-label"><span class="q-number">Q4.</span>The DCG booth enhanced the overall visibility and reputation of the Dental College of Georgia at this meeting.<span class="q-required">*</span></span>
+      <div class="agree-scale" data-name="q4">
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q4" value="Strongly Disagree">Strongly<br>Disagree</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q4" value="Disagree">Disagree</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q4" value="Neutral">Neutral</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q4" value="Agree">Agree</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q4" value="Strongly Agree">Strongly<br>Agree</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOCK 3 -->
+  <div class="block">
+    <div class="block-label">Block 3 / Booth Design &amp; Engagement</div>
+    <div class="block-title">What Worked</div>
+
+    <div class="question" data-q="q5">
+      <span class="q-label"><span class="q-number">Q5.</span>How effective was the golf theme in representing Augusta and engaging attendees?<span class="q-required">*</span></span>
+      <div class="likert" data-name="q5">
+        <div class="likert-option" onclick="selectLikert(this)"><input type="radio" name="q5" value="1"><span class="likert-num">1</span><span class="likert-label">Not Effective</span></div>
+        <div class="likert-option" onclick="selectLikert(this)"><input type="radio" name="q5" value="2"><span class="likert-num">2</span><span class="likert-label">Slightly</span></div>
+        <div class="likert-option" onclick="selectLikert(this)"><input type="radio" name="q5" value="3"><span class="likert-num">3</span><span class="likert-label">Moderate</span></div>
+        <div class="likert-option" onclick="selectLikert(this)"><input type="radio" name="q5" value="4"><span class="likert-num">4</span><span class="likert-label">Very</span></div>
+        <div class="likert-option" onclick="selectLikert(this)"><input type="radio" name="q5" value="5"><span class="likert-num">5</span><span class="likert-label">Extremely</span></div>
+      </div>
+    </div>
+
+    <div class="question" data-q="q6">
+      <span class="q-label"><span class="q-number">Q6.</span>Which booth elements were most engaging to attendees?</span>
+      <div class="q-note">Select all that apply. <a href="#" class="select-all-link" onclick="toggleSelectAll(event)">Select all</a></div>
+      <div class="options" data-name="q6" data-type="checkbox">
+        <div class="option" onclick="selectCheck(this)"><input type="checkbox" name="q6" value="Putting mat / golf experience"><label>Putting mat / golf experience</label></div>
+        <div class="option" onclick="selectCheck(this)"><input type="checkbox" name="q6" value="Callaway golf balls"><label>Callaway golf balls</label></div>
+        <div class="option" onclick="selectCheck(this)"><input type="checkbox" name="q6" value="Peach-flavored lip balms"><label>Peach-flavored lip balms</label></div>
+        <div class="option" onclick="selectCheck(this)"><input type="checkbox" name="q6" value="Green markers"><label>Green markers</label></div>
+        <div class="option" onclick="selectCheck(this)"><input type="checkbox" name="q6" value="Vertical monitor / digital display"><label>Vertical monitor / digital display</label></div>
+        <div class="option" onclick="selectCheck(this)"><input type="checkbox" name="q6" value="Custom flyers with QR codes"><label>Custom flyers with QR codes</label></div>
+        <div class="option" onclick="selectCheck(this)"><input type="checkbox" name="q6" value="Golf flags"><label>Golf flags</label></div>
+        <div class="option" onclick="selectCheck(this)"><input type="checkbox" name="q6" value="Overall booth esthetics"><label>Overall booth esthetics</label></div>
+      </div>
+    </div>
+
+    <div class="question" data-q="q7">
+      <span class="q-label"><span class="q-number">Q7.</span>Did you personally witness attendees scanning QR codes or asking about faculty/staff positions at DCG?<span class="q-required">*</span></span>
+      <div class="options" data-name="q7" data-type="radio">
+        <div class="option" onclick="selectOption(this)"><input type="radio" name="q7" value="Yes"><label>Yes</label></div>
+        <div class="option" onclick="selectOption(this)"><input type="radio" name="q7" value="No"><label>No</label></div>
+        <div class="option" onclick="selectOption(this)"><input type="radio" name="q7" value="Not sure"><label>Not sure</label></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOCK 4 -->
+  <div class="block">
+    <div class="block-label">Block 4 / Professional &amp; Educational Impact</div>
+    <div class="block-title">Growth and Development</div>
+
+    <div class="question" data-q="q8">
+      <span class="q-label"><span class="q-number">Q8.</span>Attending this meeting expanded my understanding of the breadth and scope of dental research.<span class="q-required">*</span></span>
+      <div class="agree-scale" data-name="q8">
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q8" value="Strongly Disagree">Strongly<br>Disagree</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q8" value="Disagree">Disagree</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q8" value="Neutral">Neutral</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q8" value="Agree">Agree</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q8" value="Strongly Agree">Strongly<br>Agree</div>
+      </div>
+    </div>
+
+    <div class="question" data-q="q9">
+      <span class="q-label"><span class="q-number">Q9.</span>Participating in this meeting enhanced my professional development.<span class="q-required">*</span></span>
+      <div class="agree-scale" data-name="q9">
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q9" value="Strongly Disagree">Strongly<br>Disagree</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q9" value="Disagree">Disagree</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q9" value="Neutral">Neutral</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q9" value="Agree">Agree</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q9" value="Strongly Agree">Strongly<br>Agree</div>
+      </div>
+    </div>
+
+    <div class="question" data-q="q10">
+      <span class="q-label"><span class="q-number">Q10.</span>DCG should continue sending a delegation with a booth to future IADR/AADOCR meetings.<span class="q-required">*</span></span>
+      <div class="agree-scale" data-name="q10">
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q10" value="Strongly Disagree">Strongly<br>Disagree</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q10" value="Disagree">Disagree</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q10" value="Neutral">Neutral</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q10" value="Agree">Agree</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q10" value="Strongly Agree">Strongly<br>Agree</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOCK 5 -->
+  <div class="block">
+    <div class="block-label">Block 5 / Logistics &amp; Planning</div>
+    <div class="block-title">What Could Be Better</div>
+
+    <div class="question" data-q="q11">
+      <span class="q-label"><span class="q-number">Q11.</span>How would you rate the overall logistics and organization of the DCG booth (setup, staffing schedule, materials, shipping)?<span class="q-required">*</span></span>
+      <div class="likert" data-name="q11">
+        <div class="likert-option" onclick="selectLikert(this)"><input type="radio" name="q11" value="1"><span class="likert-num">1</span><span class="likert-label">Poor</span></div>
+        <div class="likert-option" onclick="selectLikert(this)"><input type="radio" name="q11" value="2"><span class="likert-num">2</span><span class="likert-label">Fair</span></div>
+        <div class="likert-option" onclick="selectLikert(this)"><input type="radio" name="q11" value="3"><span class="likert-num">3</span><span class="likert-label">Good</span></div>
+        <div class="likert-option" onclick="selectLikert(this)"><input type="radio" name="q11" value="4"><span class="likert-num">4</span><span class="likert-label">Very Good</span></div>
+        <div class="likert-option" onclick="selectLikert(this)"><input type="radio" name="q11" value="5"><span class="likert-num">5</span><span class="likert-label">Excellent</span></div>
+      </div>
+    </div>
+
+    <div class="question" data-q="q12">
+      <span class="q-label"><span class="q-number">Q12.</span>The Microsoft Bookings system for scheduling booth staffing was effective.</span>
+      <div class="agree-scale" data-name="q12">
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q12" value="Strongly Disagree">Strongly<br>Disagree</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q12" value="Disagree">Disagree</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q12" value="Neutral">Neutral</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q12" value="Agree">Agree</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q12" value="Strongly Agree">Strongly<br>Agree</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q12" value="N/A">N/A</div>
+      </div>
+    </div>
+
+    <div class="question" data-q="q13">
+      <span class="q-label"><span class="q-number">Q13.</span>What logistical aspect could be most improved for next year?<span class="q-required">*</span></span>
+      <div class="q-note">Select up to 3.</div>
+      <div class="options" data-name="q13" data-type="checkbox" data-max="3">
+        <div class="option" onclick="selectCheckMax(this,3)"><input type="checkbox" name="q13" value="Earlier planning timeline"><label>Earlier planning timeline</label></div>
+        <div class="option" onclick="selectCheckMax(this,3)"><input type="checkbox" name="q13" value="Better staffing coordination"><label>Better staffing coordination</label></div>
+        <div class="option" onclick="selectCheckMax(this,3)"><input type="checkbox" name="q13" value="Improved booth materials"><label>Improved booth materials</label></div>
+        <div class="option" onclick="selectCheckMax(this,3)"><input type="checkbox" name="q13" value="Shipping and transport process"><label>Shipping and transport process</label></div>
+        <div class="option" onclick="selectCheckMax(this,3)"><input type="checkbox" name="q13" value="Communication before the meeting"><label>Communication before the meeting</label></div>
+        <div class="option" onclick="selectCheckMax(this,3)"><input type="checkbox" name="q13" value="Promotional item selection"><label>Promotional item selection</label></div>
+        <div class="option" onclick="selectCheckMax(this,3)"><input type="checkbox" name="q13" value="Other"><label>Other</label></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOCK 6 -->
+  <div class="block">
+    <div class="block-label">Block 6 / Future Participation</div>
+    <div class="block-title">Looking Ahead</div>
+
+    <div class="question" data-q="q14">
+      <span class="q-label"><span class="q-number">Q14.</span>Would you be willing to staff the DCG booth at a future IADR/AADOCR or ADEA meeting?<span class="q-required">*</span></span>
+      <div class="options" data-name="q14" data-type="radio">
+        <div class="option" onclick="selectOption(this)"><input type="radio" name="q14" value="Definitely yes"><label>Definitely yes</label></div>
+        <div class="option" onclick="selectOption(this)"><input type="radio" name="q14" value="Probably yes"><label>Probably yes</label></div>
+        <div class="option" onclick="selectOption(this)"><input type="radio" name="q14" value="Unsure"><label>Unsure</label></div>
+        <div class="option" onclick="selectOption(this)"><input type="radio" name="q14" value="Probably not"><label>Probably not</label></div>
+      </div>
+    </div>
+
+    <div class="question" data-q="q15">
+      <span class="q-label"><span class="q-number">Q15.</span>Should DCG replicate this booth concept at ADEA for student and faculty recruitment?<span class="q-required">*</span></span>
+      <div class="agree-scale" data-name="q15">
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q15" value="Strongly Disagree">Strongly<br>Disagree</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q15" value="Disagree">Disagree</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q15" value="Neutral">Neutral</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q15" value="Agree">Agree</div>
+        <div class="agree-option" onclick="selectAgree(this)"><input type="radio" name="q15" value="Strongly Agree">Strongly<br>Agree</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOCK 7 -->
+  <div class="block">
+    <div class="block-label">Block 7 / Open-Ended</div>
+    <div class="block-title">In Your Own Words</div>
+
+    <div style="background:var(--white);border-left:4px solid var(--green);border-radius:0 8px 8px 0;padding:18px 22px;margin-bottom:28px;box-shadow:0 1px 3px rgba(0,0,0,0.04)">
+      <p style="font-size:15px;color:var(--navy);line-height:1.6;margin:0"><strong>These final questions matter the most.</strong> Please be honest, be specific, and write as much as you want. We need to know what worked and what did not so we can improve for next year. There are no wrong answers here. Your candid feedback is what makes this survey valuable.</p>
+    </div>
+
+    <div class="question" data-q="q16">
+      <span class="q-label"><span class="q-number">Q16.</span>What was the single best thing about the DCG booth or the trip overall?</span>
+      <textarea class="q-textarea" name="q16" placeholder="What stood out most to you? What moment, interaction, or element made the biggest impression? Be as specific as you can."></textarea>
+    </div>
+
+    <div class="question" data-q="q17">
+      <span class="q-label"><span class="q-number">Q17.</span>What did not work well, or what would you change?</span>
+      <textarea class="q-textarea" name="q17" placeholder="Be completely honest. Was there something about the booth, the logistics, the materials, the staffing, or the trip itself that frustrated you or could have been better? We want to hear it."></textarea>
+    </div>
+
+    <div class="question" data-q="q18">
+      <span class="q-label"><span class="q-number">Q18.</span>Any additional suggestions, comments, or feedback?</span>
+      <textarea class="q-textarea" name="q18" placeholder="Ideas for next year, things we did not ask about, anything at all. This is your space."></textarea>
+    </div>
+  </div>
+
+  <div class="submit-area">
+    <button class="submit-btn" onclick="submitSurvey()">Submit Survey</button>
+    <p class="submit-note">Your honest feedback will directly shape future DCG participation at research meetings. Thank you for taking the time.</p>
+  </div>
+</div>
+
+<div class="thank-you" id="thankYou">
+  <div class="check-circle">
+    <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+  </div>
+  <h2>Thank You!</h2>
+  <p>Your feedback is extremely valuable. It will directly shape how DCG plans future participation at IADR/AADOCR and ADEA meetings, including budget, logistics, and delegation planning.</p>
+  <p style="font-size:14px;color:var(--gray)">Office of Digital Technologies | Dental College of Georgia at Augusta University</p>
+</div>
+
+<div class="export-area" id="exportArea">
+  <button class="export-btn" onclick="exportCSV()">Download Responses (CSV)</button>
+  <button class="export-btn" onclick="copyResponses()">Copy to Clipboard</button>
+</div>
+
+<footer class="survey-footer">
+  <p class="ft">Dental College of Georgia at Augusta University</p>
+  <p>Office of Digital Technologies | IADR/AADOCR 2026 Post-Event Survey</p>
+</footer>
+
+<script>
+// ============================================================
+// GOOGLE SHEETS INTEGRATION
+// Replace the URL below with your deployed Apps Script URL.
+// See the setup guide for instructions.
+// ============================================================
+const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbz3sqYph7_YrferbYNBzcvNQgZjKJZSw3lGprW_ARgVPAPssef2RzamaUCLHf-6Z19yaQ/exec';
+
+function selectOption(el) {
+  el.closest('.options').querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  el.querySelector('input').checked = true;
+  updateProgress();
+}
+function selectCheck(el) {
+  const input = el.querySelector('input');
+  input.checked = !input.checked;
+  el.classList.toggle('selected', input.checked);
+  updateProgress();
+}
+function selectCheckMax(el, max) {
+  const container = el.closest('.options');
+  const input = el.querySelector('input');
+  const checked = container.querySelectorAll('input:checked');
+  if (!input.checked && checked.length >= max) return;
+  input.checked = !input.checked;
+  el.classList.toggle('selected', input.checked);
+  updateProgress();
+}
+function selectLikert(el) {
+  el.closest('.likert').querySelectorAll('.likert-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  el.querySelector('input').checked = true;
+  updateProgress();
+}
+function selectAgree(el) {
+  el.closest('.agree-scale').querySelectorAll('.agree-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  el.querySelector('input').checked = true;
+  updateProgress();
+}
+function toggleSelectAll(e) {
+  e.preventDefault();
+  const link = e.target;
+  const q6options = document.querySelectorAll('input[name="q6"]');
+  const allChecked = Array.from(q6options).every(i => i.checked);
+  q6options.forEach(i => {
+    i.checked = !allChecked;
+    i.closest('.option').classList.toggle('selected', !allChecked);
+  });
+  link.textContent = allChecked ? 'Select all' : 'Clear all';
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = 18;
+  let answered = 0;
+  ['q1','q2','q3','q4','q5','q7','q8','q9','q10','q11','q12','q14','q15'].forEach(q => {
+    if (document.querySelector('input[name="'+q+'"]:checked')) answered++;
+  });
+  if (document.querySelectorAll('input[name="q6"]:checked').length > 0) answered++;
+  if (document.querySelectorAll('input[name="q13"]:checked').length > 0) answered++;
+  ['q16','q17','q18'].forEach(q => {
+    const ta = document.querySelector('textarea[name="'+q+'"]');
+    if (ta && ta.value.trim().length > 0) answered++;
+  });
+  const pct = Math.round((answered / total) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = pct + '%';
+}
+
+document.querySelectorAll('.q-textarea').forEach(ta => {
+  ta.addEventListener('input', updateProgress);
+});
+
+function submitSurvey() {
+  // Validate required fields
+  const requiredRadios = ['q1','q2','q3','q4','q5','q7','q8','q9','q10','q11','q14','q15'];
+  let missing = [];
+  requiredRadios.forEach(q => {
+    if (!document.querySelector('input[name="'+q+'"]:checked')) missing.push(q);
+  });
+  if (document.querySelectorAll('input[name="q13"]:checked').length === 0) missing.push('q13');
+  if (missing.length > 0) {
+    const first = document.querySelector('[data-q="'+missing[0]+'"]');
+    first.scrollIntoView({behavior:'smooth',block:'center'});
+    first.style.outline = '2px solid var(--red)';
+    first.style.outlineOffset = '8px';
+    first.style.borderRadius = '6px';
+    setTimeout(() => { first.style.outline = 'none'; }, 3000);
+    const num = missing[0].toUpperCase();
+    alert('Please answer all required questions (marked with *). ' + num + ' is missing.');
+    return;
+  }
+
+  // Disable submit button to prevent double-clicks
+  const submitBtn = document.querySelector('.submit-btn');
+  submitBtn.textContent = 'Submitting...';
+  submitBtn.disabled = true;
+  submitBtn.style.opacity = '0.6';
+
+  // Collect responses
+  const data = getResponses();
+
+  // Send to Google Sheets
+  if (GOOGLE_SHEETS_URL && GOOGLE_SHEETS_URL !== 'PASTE_YOUR_GOOGLE_SHEETS_URL_HERE') {
+    fetch(GOOGLE_SHEETS_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    }).then(() => {
+      showThankYou();
+    }).catch(err => {
+      console.error('Submission error:', err);
+      showThankYou(); // Show thank you anyway, data saved locally via export
+    });
+  } else {
+    // No Google Sheets URL configured, just show thank you
+    showThankYou();
+  }
+}
+
+function showThankYou() {
+  document.getElementById('surveyForm').style.display = 'none';
+  document.getElementById('thankYou').style.display = 'block';
+  document.getElementById('exportArea').style.display = 'block';
+  window.scrollTo({top:0,behavior:'smooth'});
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('progressLabel').textContent = '100%';
+}
+
+function getResponses() {
+  const data = {};
+  ['q1','q2','q3','q4','q5','q7','q8','q9','q10','q11','q12','q14','q15'].forEach(q => {
+    const el = document.querySelector('input[name="'+q+'"]:checked');
+    data[q] = el ? el.value : '';
+  });
+  ['q6','q13'].forEach(q => {
+    const checked = document.querySelectorAll('input[name="'+q+'"]:checked');
+    data[q] = Array.from(checked).map(c => c.value).join('; ');
+  });
+  ['q16','q17','q18'].forEach(q => {
+    data[q] = document.querySelector('textarea[name="'+q+'"]').value.trim();
+  });
+  return data;
+}
+
+function exportCSV() {
+  const data = getResponses();
+  const ordered = ['q1','q2','q3','q4','q5','q6','q7','q8','q9','q10','q11','q12','q13','q14','q15','q16','q17','q18'];
+  const headers = ordered.join(',');
+  const values = ordered.map(q => '"' + (data[q]||'').replace(/"/g,'""') + '"').join(',');
+  const csv = headers + '\n' + values;
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'iadr-2026-survey-response.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function copyResponses() {
+  const data = getResponses();
+  const labels = {
+    q1:'Role', q2:'Overall Meeting Rating', q3:'Booth Rating', q4:'Booth Enhanced Visibility',
+    q5:'Golf Theme Effectiveness', q6:'Most Engaging Elements', q7:'Witnessed QR/Recruitment',
+    q8:'Expanded Research Understanding', q9:'Professional Development', q10:'Continue Delegation+Booth',
+    q11:'Logistics Rating', q12:'Bookings System Effective', q13:'Top Improvement Areas',
+    q14:'Willing to Staff Again', q15:'Replicate at ADEA', q16:'Best Thing',
+    q17:'What Did Not Work Well', q18:'Additional Feedback'
+  };
+  const ordered = ['q1','q2','q3','q4','q5','q6','q7','q8','q9','q10','q11','q12','q13','q14','q15','q16','q17','q18'];
+  let text = 'IADR/AADOCR 2026 Survey Response\n================================\n\n';
+  ordered.forEach(q => {
+    text += labels[q] + ': ' + (data[q] || '(no response)') + '\n\n';
+  });
+  navigator.clipboard.writeText(text).then(() => {
+    alert('Responses copied to clipboard!');
+  });
+}
+</script>
+
+</body>
+</html>
